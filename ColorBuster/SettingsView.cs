@@ -15,15 +15,13 @@ namespace ColorBuster
         public SettingsView()
         {
             InitializeComponent();
-            this.FormClosed += new FormClosedEventHandler(SettingsView_FormClosed);
         }
 
         void SettingsView_FormClosed(object sender, FormClosedEventArgs e)
         {
-            if (e.CloseReason == CloseReason.WindowsShutDown)
-            {
-                Program.Requester = 0;
-            }
+            MessageBox.Show("Warning: No new settings applied");
+            GameView game = new GameView();
+            game.Show();
         }
 
         private void newGameButton_Click(object sender, EventArgs e)
@@ -45,13 +43,15 @@ namespace ColorBuster
                     + "\nColumns: " + Program.columns
                     + "\nRows: " + Program.rows
                     + "\nMatched Tiles: " + Program.matchedTiles);
-                Program.Requester = 1;
-                this.Close();
+                this.Hide();
+                GameView game = new GameView();
+                game.Show();
             }
         }
 
         private void SettingsView_Load(object sender, EventArgs e)
         {
+            this.FormClosed += new FormClosedEventHandler(SettingsView_FormClosed);
             this.FormBorderStyle = FormBorderStyle.FixedSingle;
 
             //Init values for combo boxes

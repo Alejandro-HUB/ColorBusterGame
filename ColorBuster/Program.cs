@@ -17,10 +17,6 @@ namespace ColorBuster
         public static int columns = 6;
         public static int matchedTiles = 0;
 
-        //Logic variables
-        public static int Requester = 0;
-        public static bool newGame = false;
-
         //Colors
         public static List<Image> images = new List<Image>();
 
@@ -37,20 +33,6 @@ namespace ColorBuster
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             Application.Run(new GameView());
-
-            while (true)
-            {
-                if (Requester == 1)
-                {
-                    Application.Run(new GameView());
-                }
-                else if (Requester == 2)
-                {
-                    Application.Run(new SettingsView());
-                }
-                else
-                    Environment.Exit(0);
-            }
         }
     }
 }

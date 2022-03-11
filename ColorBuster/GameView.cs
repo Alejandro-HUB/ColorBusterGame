@@ -17,17 +17,14 @@ namespace ColorBuster
             InitializeComponent();
         }
 
-        void GameView_FormClosed(object sender, FormClosedEventArgs e)
-        {
-            if (this.DialogResult == DialogResult.Cancel)
-            {
-                Program.Requester = 0;
-            }
-        }
-
         private void newGameButton_Click(object sender, EventArgs e)
         {
             initBoard();
+        }
+
+        void GameView_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            Environment.Exit(0);
         }
 
         private void initBoard()
@@ -110,8 +107,9 @@ namespace ColorBuster
 
         private void settingsButton_Click(object sender, EventArgs e)
         {
-            Program.Requester = 2;
-            this.Close();
+            this.Hide();
+            SettingsView settings = new SettingsView();
+            settings.Show();
         }
 
         private void GameView_Load(object sender, EventArgs e)
