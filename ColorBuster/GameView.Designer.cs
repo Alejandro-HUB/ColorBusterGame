@@ -45,9 +45,9 @@
             // newGameButton
             // 
             this.newGameButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.newGameButton.Location = new System.Drawing.Point(400, 944);
+            this.newGameButton.Location = new System.Drawing.Point(356, 944);
             this.newGameButton.Name = "newGameButton";
-            this.newGameButton.Size = new System.Drawing.Size(151, 43);
+            this.newGameButton.Size = new System.Drawing.Size(216, 43);
             this.newGameButton.TabIndex = 1;
             this.newGameButton.Text = "New Game";
             this.newGameButton.UseVisualStyleBackColor = true;
