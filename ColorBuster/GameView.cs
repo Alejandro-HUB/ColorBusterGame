@@ -30,7 +30,7 @@ namespace ColorBuster
 
         private void initBoard()
         {
-            //Rest Tile List
+            //Reset Tile List
             Program.tileList.Clear();
 
             //Colors
