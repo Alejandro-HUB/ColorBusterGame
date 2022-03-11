@@ -19,6 +19,7 @@ namespace ColorBuster
 
         private void newGameButton_Click(object sender, EventArgs e)
         {
+            board.Controls.Clear();
             initBoard();
         }
 
