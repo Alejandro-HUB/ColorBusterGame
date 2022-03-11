@@ -29,6 +29,9 @@ namespace ColorBuster
 
         private void initBoard()
         {
+            //Rest Tile List
+            Program.tileList.Clear();
+
             //Colors
             Program.images.Add(ColorBuster.Properties.Resources.blue);
             Program.images.Add(ColorBuster.Properties.Resources.green);
