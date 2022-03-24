@@ -33,6 +33,7 @@ namespace ColorBuster
             //Reset Tile List
             Program.tileList.Clear();
             Program.matchTiles.Clear();
+            this.label1.Text = "Score: " + Program.score;
 
             //Colors
             Program.images.Add(ColorBuster.Properties.Resources.blue);
@@ -120,6 +121,23 @@ namespace ColorBuster
                         foreach (var tileToPop in Program.matchTiles)
                         {
                             board.Controls.Remove(tileToPop.control);
+                            Program.score += 20;
+                            this.label1.Text = "Score: " + Program.score;
+                        }
+                        //Add new tiles to board
+                        foreach (var refillBoard in Program.matchTiles)
+                        {
+                            //New tile to replace the old one
+                            TileModel tileModel = refillBoard;
+
+                            //Randomize color again
+                            Random random = new Random();
+                            int currentImage = random.Next(0, 4);
+                            tileModel.control.BackgroundImage = Program.images[currentImage];
+                            tileModel.imageIndex = currentImage;
+
+                            //Add tile
+                            board.Controls.Add(tileModel.control);
                         }
                         Program.matchTiles.Clear();
                     }
@@ -153,7 +171,7 @@ namespace ColorBuster
 
         public void IsmoveAvailable()
         {
-            
+
         }
 
         public List<TileModel> getAdjecentTiles(TileModel tileToCheck)
@@ -180,8 +198,6 @@ namespace ColorBuster
             tiles.Add(eastTile);
 
             var matchedTiles = tiles.Where(x => x != null && x.imageIndex == tileToCheck.imageIndex);
-            
-            //bool check = matchedTiles.All(x => x != null && Program.matchTiles.Select(y => y.Name).Contains(x.Name));
 
             while (matchedTiles != null)
             {

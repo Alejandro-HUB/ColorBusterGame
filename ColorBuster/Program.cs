@@ -16,7 +16,7 @@ namespace ColorBuster
         public static int rows = 6;
         public static int columns = 6;
         public static int matchedTiles = 3;
-        public static bool moveAvailable = true;
+        public static int score = 0;
 
         //Colors
         public static List<Image> images = new List<Image>();
