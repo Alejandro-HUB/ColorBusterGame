@@ -32,6 +32,7 @@ namespace ColorBuster
         {
             //Reset Tile List
             Program.tileList.Clear();
+            Program.matchTiles.Clear();
 
             //Colors
             Program.images.Add(ColorBuster.Properties.Resources.blue);
@@ -66,7 +67,7 @@ namespace ColorBuster
                     tiles[i].Click += new EventHandler(tile_Click);
 
                     //Color
-                    currentImage = random.Next(0, Program.images.Count);
+                    currentImage = random.Next(0, 4);
                     tiles[i].BackgroundImage = Program.images[currentImage];
 
                     //Location
@@ -81,6 +82,9 @@ namespace ColorBuster
                         xLocation = x,
                         yLocation = y,
                         imageIndex = currentImage,
+                        width = tiles[i].Width,
+                        height = tiles[i].Height,
+                        control = tiles[i],
                     };
 
                     Program.tileList.Add(tile);
@@ -93,21 +97,115 @@ namespace ColorBuster
             }
         }
 
-        void tile_Click(object sender, EventArgs e)
+        public void tile_Click(object sender, EventArgs e)
         {
 
             foreach (var tile in Program.tileList)
             {
                 if (((PictureBox)(sender)).Name == tile.Name)
                 {
-                    Image test = Program.images[tile.imageIndex];
-                    var show = test.Palette.ToString();
+                    MessageBox.Show("The tile you clicked is: " + tile.Name
+                                   + "\n With coordinates:"
+                                   + "\n x: " + tile.xLocation
+                                   + "\n y: " + tile.yLocation);
 
-                    MessageBox.Show("The tile you clicked is: " + tile.Name);
+                    //Check if moves are available and get adjecent tiles
+                    List<TileModel> tiles = new List<TileModel>();
+                    tiles = getAdjecentTiles(tile);
+
+                    //If there are more moves available and matched tiles settings are met start poping tiles
+                    if (Program.matchTiles.Count >= Program.matchedTiles && tiles.Count != 0)
+                    {
+                        //Remove each adjecent tile
+                        foreach (var tileToPop in Program.matchTiles)
+                        {
+                            board.Controls.Remove(tileToPop.control);
+                        }
+                        Program.matchTiles.Clear();
+                    }
+                    else if (tiles.Count == 0 && Program.matchTiles.Count == 0)
+                    {
+                        string message = "No more moves available"
+                                        + "\nNew game?";
+                        string title = "Game over";
+                        MessageBoxButtons buttons = MessageBoxButtons.YesNo;
+                        DialogResult result = MessageBox.Show(message, title, buttons);
+                        if (result == DialogResult.Yes)
+                        {
+                            board.Controls.Clear();
+                            initBoard();
+                            break;
+                        }
+                        else
+                        {
+                            this.Close();
+                        }
+                    }
+                    else
+                    {
+                        MessageBox.Show("Matched tiles set: " + Program.matchedTiles
+                                       + "\nMatched tiles clicked: " + (Program.matchTiles.Count));
+                        Program.matchTiles.Clear();
+                    }
                 }
             }
-
         }
+
+        public void IsmoveAvailable()
+        {
+            
+        }
+
+        public List<TileModel> getAdjecentTiles(TileModel tileToCheck)
+        {
+            List<TileModel> returnTiles = null;
+            List<TileModel> tiles = new List<TileModel>();
+
+            //Add current tile to alredy checked list if not already there
+            if (!Program.matchTiles.Contains(tileToCheck))
+            {
+                Program.matchTiles.Add(tileToCheck);
+            }
+
+            //Locate the tiles next to the current tile
+            TileModel northTile = Program.tileList.Where(y => y != null && y.yLocation == tileToCheck.yLocation - tileToCheck.height && y.xLocation == tileToCheck.xLocation).FirstOrDefault();
+            TileModel southTile = Program.tileList.Where(y => y != null && y.yLocation == tileToCheck.yLocation + tileToCheck.height && y.xLocation == tileToCheck.xLocation).FirstOrDefault();
+            TileModel westTile = Program.tileList.Where(x => x != null && x.xLocation == tileToCheck.xLocation - tileToCheck.width && x.yLocation == tileToCheck.yLocation).FirstOrDefault();
+            TileModel eastTile = Program.tileList.Where(x => x != null && x.xLocation == tileToCheck.xLocation + tileToCheck.width && x.yLocation == tileToCheck.yLocation).FirstOrDefault();
+
+            //Get the tiles that have the same color to the current tile
+            tiles.Add(northTile);
+            tiles.Add(southTile);
+            tiles.Add(westTile);
+            tiles.Add(eastTile);
+
+            var matchedTiles = tiles.Where(x => x != null && x.imageIndex == tileToCheck.imageIndex);
+            
+            //bool check = matchedTiles.All(x => x != null && Program.matchTiles.Select(y => y.Name).Contains(x.Name));
+
+            while (matchedTiles != null)
+            {
+                foreach (var tile in matchedTiles)
+                {
+                    //See if a tile was already checked
+                    bool check = Program.matchTiles.Contains(tile);
+                    if (!check)
+                    {
+                        Program.matchTiles.Add(tile);
+                        getAdjecentTiles(tile);
+                    }
+                }
+                returnTiles = matchedTiles.ToList();
+                matchedTiles = null;
+            }
+            //Check if there are moves available by checking if returnTiles.count is 0
+            if (returnTiles.Count == 0)
+            {
+                Program.matchTiles.Clear();
+            }
+            return returnTiles;
+        }
+
 
         private void settingsButton_Click(object sender, EventArgs e)
         {
