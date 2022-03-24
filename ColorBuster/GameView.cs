@@ -19,7 +19,9 @@ namespace ColorBuster
 
         private void newGameButton_Click(object sender, EventArgs e)
         {
+            Program.score = 0;
             board.Controls.Clear();
+            this.label1.Text = "Score: " + Program.score;
             initBoard();
         }
 
@@ -31,6 +33,7 @@ namespace ColorBuster
         private void initBoard()
         {
             //Reset Tile List
+            Program.score = 0;
             Program.tileList.Clear();
             Program.matchTiles.Clear();
             this.label1.Text = "Score: " + Program.score;
@@ -131,9 +134,21 @@ namespace ColorBuster
                             TileModel tileModel = refillBoard;
 
                             //Randomize color again
+                            
                             Random random = new Random();
                             int currentImage = random.Next(0, 4);
+                            if (!Program.randomNoDuplicates.Contains(currentImage) && Program.randomNoDuplicates.Count != 4)
+                            {
+                                Program.randomNoDuplicates.Add(currentImage);
+                            }
+                            else 
+                            {
+                                Program.randomNoDuplicates.Clear();
+                                currentImage = random.Next(0,4);
+                            }
+
                             tileModel.control.BackgroundImage = Program.images[currentImage];
+                            
                             tileModel.imageIndex = currentImage;
 
                             //Add tile
@@ -151,6 +166,7 @@ namespace ColorBuster
                         if (result == DialogResult.Yes)
                         {
                             board.Controls.Clear();
+                            Program.score = 0;
                             initBoard();
                             break;
                         }

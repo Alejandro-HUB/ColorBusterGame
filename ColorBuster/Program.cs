@@ -27,6 +27,9 @@ namespace ColorBuster
         //Get matched tiles
         public static List<TileModel> matchTiles = new List<TileModel>();
 
+        //Randomize colors even more
+        public static List<int> randomNoDuplicates = new List<int>();
+
         /// <summary>
         /// The main entry point for the application.
         /// </summary>
