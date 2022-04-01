@@ -34,7 +34,9 @@
             this.Notification = new System.Windows.Forms.Label();
             this.Cat = new System.Windows.Forms.PictureBox();
             this.settingsButton = new System.Windows.Forms.Button();
+            this.NameGame = new System.Windows.Forms.PictureBox();
             ((System.ComponentModel.ISupportInitialize)(this.Cat)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.NameGame)).BeginInit();
             this.SuspendLayout();
             // 
             // board
@@ -99,12 +101,24 @@
             this.settingsButton.UseVisualStyleBackColor = true;
             this.settingsButton.Click += new System.EventHandler(this.settingsButton_Click);
             // 
+            // NameGame
+            // 
+            this.NameGame.BackColor = System.Drawing.Color.Transparent;
+            this.NameGame.BackgroundImage = global::ColorBuster.Properties.Resources.Name;
+            this.NameGame.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.NameGame.Location = new System.Drawing.Point(923, 284);
+            this.NameGame.Name = "NameGame";
+            this.NameGame.Size = new System.Drawing.Size(336, 143);
+            this.NameGame.TabIndex = 5;
+            this.NameGame.TabStop = false;
+            // 
             // GameView
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.White;
             this.ClientSize = new System.Drawing.Size(1271, 1043);
+            this.Controls.Add(this.NameGame);
             this.Controls.Add(this.Notification);
             this.Controls.Add(this.Cat);
             this.Controls.Add(this.settingsButton);
@@ -116,6 +130,7 @@
             this.Text = "Color Buster Game";
             this.Load += new System.EventHandler(this.GameView_Load);
             ((System.ComponentModel.ISupportInitialize)(this.Cat)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.NameGame)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -129,6 +144,7 @@
         private System.Windows.Forms.Button settingsButton;
         private System.Windows.Forms.PictureBox Cat;
         private System.Windows.Forms.Label Notification;
+        private System.Windows.Forms.PictureBox NameGame;
     }
 }
 

@@ -37,6 +37,7 @@ namespace ColorBuster
             Program.tileList.Clear();
             Program.matchTiles.Clear();
             this.label1.Text = "Score: " + Program.score;
+            this.Notification.Text = "Game Started";
             Cat.BackgroundImage = ColorBuster.Properties.Resources.Cat_Normal;
 
             //Colors
