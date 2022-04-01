@@ -49,7 +49,7 @@ namespace ColorBuster
 
             Random random = new Random();
 
-            //Make rows
+            //Make rows and columns
             for (int j = 0; j < Program.columns; j++)
             {
                 PictureBox[] tiles = new PictureBox[Program.rows];
@@ -76,7 +76,7 @@ namespace ColorBuster
                     y = ((i - 1) + 1) * tiles[i].Height;
                     tiles[i].Location = new Point(x, y);
 
-                    //Store location
+                    //Populate tile model with current tile
                     var tile = new TileModel
                     {
                         Name = tiles[i].Name,
@@ -88,9 +88,11 @@ namespace ColorBuster
                         control = tiles[i],
                     };
 
+                    //Add tile to the tile list
                     Program.tileList.Add(tile);
                     totalTiles++;
                 }
+                //Add tiles to the board
                 for (int k = 0; k < Program.rows; k++)
                 {
                     board.Controls.Add(tiles[k]);
@@ -110,7 +112,7 @@ namespace ColorBuster
             {
                 if (((PictureBox)(sender)).Name == tile.Name)
                 {
-                    //Check if moves are available and get adjecent tiles
+                    //Get adjecent tiles
                     List<TileModel> tiles = new List<TileModel>();
                     tiles = getAdjecentTiles(tile, false);
 
