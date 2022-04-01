@@ -19,9 +19,6 @@ namespace ColorBuster
 
         private void newGameButton_Click(object sender, EventArgs e)
         {
-            Program.score = 0;
-            board.Controls.Clear();
-            this.label1.Text = "Score: " + Program.score;
             initBoard();
         }
 
@@ -32,10 +29,14 @@ namespace ColorBuster
 
         private void initBoard()
         {
-            //Reset Tile List
+            //Reset Board
             Program.score = 0;
             Program.tileList.Clear();
             Program.matchTiles.Clear();
+            Program.isMoveAvailableTileList.Clear();
+            board.Controls.Clear();
+            Program.images.Clear();
+            Program.pop.Clear();
             this.label1.Text = "Score: " + Program.score;
             this.Notification.Text = "Game Started";
             Cat.BackgroundImage = ColorBuster.Properties.Resources.Cat_Normal;
@@ -107,6 +108,12 @@ namespace ColorBuster
                     board.Controls.Add(tiles[k]);
                 }
             }
+            //Check for is move available
+            bool MoveAvailable = IsmoveAvailable();
+            if (!MoveAvailable)
+            {
+                initBoard();
+            }
         }
 
         public void tile_Click(object sender, EventArgs e)
@@ -118,7 +125,7 @@ namespace ColorBuster
                 {
                     //Check if moves are available and get adjecent tiles
                     List<TileModel> tiles = new List<TileModel>();
-                    tiles = getAdjecentTiles(tile);
+                    tiles = getAdjecentTiles(tile, false);
 
                     //Check if there is a move available
                     bool moveAvailable = IsmoveAvailable();
@@ -217,8 +224,6 @@ namespace ColorBuster
                         DialogResult result = MessageBox.Show(message, title, buttons);
                         if (result == DialogResult.Yes)
                         {
-                            board.Controls.Clear();
-                            Program.score = 0;
                             initBoard();
                             break;
                         }
@@ -231,57 +236,13 @@ namespace ColorBuster
             }
         }
 
-        public bool IsmoveAvailable2()
-        {
-            List<TileModel> checkedTiles = new List<TileModel>();
-
-            //See if there are moves available for each tile in the board
-            foreach (var tile in Program.tileList)
-            {
-                //Locate the tiles next to the current tile
-                TileModel northTile = Program.tileList.Where(y => y != null && y.yLocation == tile.yLocation - tile.height && y.xLocation == tile.xLocation).FirstOrDefault();
-                TileModel southTile = Program.tileList.Where(y => y != null && y.yLocation == tile.yLocation + tile.height && y.xLocation == tile.xLocation).FirstOrDefault();
-                TileModel westTile = Program.tileList.Where(x => x != null && x.xLocation == tile.xLocation - tile.width && x.yLocation == tile.yLocation).FirstOrDefault();
-                TileModel eastTile = Program.tileList.Where(x => x != null && x.xLocation == tile.xLocation + tile.width && x.yLocation == tile.yLocation).FirstOrDefault();
-
-                //Get the tiles that are right next the current tile
-                checkedTiles.Add(northTile);
-                checkedTiles.Add(southTile);
-                checkedTiles.Add(westTile);
-                checkedTiles.Add(eastTile);
-
-                //Get the tiles that have the same color to the current tile
-                var matchedTiles = checkedTiles.Where(x => x != null && x.imageIndex == tile.imageIndex).ToList();
-
-                //Add current tile to the list of matched tiles
-                matchedTiles.Add(tile);
-
-                //If all tiles are checked and moves are possible return true
-                if (matchedTiles.Count >= Program.matchedTiles)
-                {
-                    checkedTiles.Clear();
-                    return true;
-                }
-
-                //If it is the last tile and no moves are avialble then return false
-                else if (tile == Program.tileList.Last() && matchedTiles.Count < Program.matchedTiles)
-                {
-                    checkedTiles.Clear();
-                    return false;
-                }
-                checkedTiles.Clear();
-            }
-
-            return false;
-        }
-
         public bool IsmoveAvailable()
         {
             //See if there are moves available for each tile in the board
             foreach (var tile in Program.tileList)
             {
                 //Check for adjecent tiles for each tile
-                getAdjecentTilesforIsMoveAvailable(tile);
+                getAdjecentTiles(tile, true);
 
 
                 //If all tiles are checked and moves are possible return true
@@ -303,15 +264,29 @@ namespace ColorBuster
             return false;
         }
 
-        public List<TileModel> getAdjecentTiles(TileModel tileToCheck)
+        public List<TileModel> getAdjecentTiles(TileModel tileToCheck, bool isMoveAvailableCheck)
         {
+            //Checks if there are still matched tiles
             List<TileModel> returnTiles = null;
+            //Gets populated with adjecent tiles
             List<TileModel> tiles = new List<TileModel>();
+            //Contains the adjecent matched tiles
+            List<TileModel> tilesToCheck = new List<TileModel>();
+
+            //Change the corresponding list if we are checking for is move available or for poping tiles
+            if (isMoveAvailableCheck)
+            {
+                tilesToCheck = Program.isMoveAvailableTileList;
+            }
+            else
+            {
+                tilesToCheck = Program.matchTiles;
+            }
 
             //Add current tile to alredy checked list if not already there
-            if (!Program.matchTiles.Contains(tileToCheck))
+            if (!tilesToCheck.Contains(tileToCheck))
             {
-                Program.matchTiles.Add(tileToCheck);
+                tilesToCheck.Add(tileToCheck);
             }
 
             //Locate the tiles next to the current tile
@@ -333,11 +308,11 @@ namespace ColorBuster
                 foreach (var tile in matchedTiles)
                 {
                     //See if a tile was already checked
-                    bool check = Program.matchTiles.Contains(tile);
+                    bool check = tilesToCheck.Contains(tile);
                     if (!check)
                     {
-                        Program.matchTiles.Add(tile);
-                        getAdjecentTiles(tile);
+                        tilesToCheck.Add(tile);
+                        getAdjecentTiles(tile, isMoveAvailableCheck);
                     }
                 }
                 returnTiles = matchedTiles.ToList();
@@ -346,56 +321,19 @@ namespace ColorBuster
             //Check if there are moves available by checking if returnTiles.count is 0
             if (returnTiles.Count == 0)
             {
-                Program.matchTiles.Clear();
+                tilesToCheck.Clear();
             }
+            //Change the corresponding list if we are checking for is move available or for poping tiles
+            if (isMoveAvailableCheck)
+            {
+                Program.isMoveAvailableTileList = tilesToCheck;
+            }
+            else
+            {
+                Program.matchTiles = tilesToCheck;
+            }
+
             return returnTiles;
-        }
-
-        public void getAdjecentTilesforIsMoveAvailable(TileModel tileToCheck)
-        {
-            List<TileModel> returnTiles = null;
-            List<TileModel> tiles = new List<TileModel>();
-
-            //Add current tile to alredy checked list if not already there
-            if (!Program.isMoveAvailableTileList.Contains(tileToCheck))
-            {
-                Program.isMoveAvailableTileList.Add(tileToCheck);
-            }
-
-            //Locate the tiles next to the current tile
-            TileModel northTile = Program.tileList.Where(y => y != null && y.yLocation == tileToCheck.yLocation - tileToCheck.height && y.xLocation == tileToCheck.xLocation).FirstOrDefault();
-            TileModel southTile = Program.tileList.Where(y => y != null && y.yLocation == tileToCheck.yLocation + tileToCheck.height && y.xLocation == tileToCheck.xLocation).FirstOrDefault();
-            TileModel westTile = Program.tileList.Where(x => x != null && x.xLocation == tileToCheck.xLocation - tileToCheck.width && x.yLocation == tileToCheck.yLocation).FirstOrDefault();
-            TileModel eastTile = Program.tileList.Where(x => x != null && x.xLocation == tileToCheck.xLocation + tileToCheck.width && x.yLocation == tileToCheck.yLocation).FirstOrDefault();
-
-            //Get the tiles that have the same color to the current tile
-            tiles.Add(northTile);
-            tiles.Add(southTile);
-            tiles.Add(westTile);
-            tiles.Add(eastTile);
-
-            var matchedTiles = tiles.Where(x => x != null && x.imageIndex == tileToCheck.imageIndex);
-
-            while (matchedTiles != null)
-            {
-                foreach (var tile in matchedTiles)
-                {
-                    //See if a tile was already checked
-                    bool check = Program.isMoveAvailableTileList.Contains(tile);
-                    if (!check)
-                    {
-                        Program.isMoveAvailableTileList.Add(tile);
-                        getAdjecentTilesforIsMoveAvailable(tile);
-                    }
-                }
-                returnTiles = matchedTiles.ToList();
-                matchedTiles = null;
-            }
-            //Check if there are moves available by checking if returnTiles.count is 0
-            if (returnTiles.Count == 0)
-            {
-                Program.isMoveAvailableTileList.Clear();
-            }
         }
 
 
