@@ -108,11 +108,6 @@ namespace ColorBuster
             {
                 if (((PictureBox)(sender)).Name == tile.Name)
                 {
-                    MessageBox.Show("The tile you clicked is: " + tile.Name
-                                   + "\n With coordinates:"
-                                   + "\n x: " + tile.xLocation
-                                   + "\n y: " + tile.yLocation);
-
                     //Check if moves are available and get adjecent tiles
                     List<TileModel> tiles = new List<TileModel>();
                     tiles = getAdjecentTiles(tile);
