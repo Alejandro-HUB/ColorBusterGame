@@ -21,6 +21,9 @@ namespace ColorBuster
         //Colors
         public static List<Image> images = new List<Image>();
 
+        //Pop Color Images
+        public static List<Image> pop = new List<Image>();
+
         //Get all the tiles
         public static List<TileModel> tileList = new List<TileModel>();
         

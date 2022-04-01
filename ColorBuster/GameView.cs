@@ -44,6 +44,12 @@ namespace ColorBuster
             Program.images.Add(ColorBuster.Properties.Resources.red);
             Program.images.Add(ColorBuster.Properties.Resources.yellow);
 
+            //Pop images
+            Program.pop.Add(ColorBuster.Properties.Resources.pop_blue);
+            Program.pop.Add(ColorBuster.Properties.Resources.pop_green);
+            Program.pop.Add(ColorBuster.Properties.Resources.pop_red);
+            Program.pop.Add(ColorBuster.Properties.Resources.pop_yellow);
+
             //Tile info
             int x = 0;
             int y = 0;
@@ -118,21 +124,17 @@ namespace ColorBuster
                     //If there are more moves available and matched tiles settings are met start poping tiles
                     if (Program.matchTiles.Count >= Program.matchedTiles && tiles.Count != 0 && moveAvailable)
                     {
-                        //Remove each adjecent tile
-                        foreach (var tileToPop in Program.matchTiles)
-                        {
-                            board.Controls.Remove(tileToPop.control);
-                            Program.score += 20;
-                            this.label1.Text = "Score: " + Program.score;
-                        }
                         //Add new tiles to board
                         foreach (var refillBoard in Program.matchTiles)
                         {
-                            //New tile to replace the old one
-                            TileModel tileModel = refillBoard;
+                            //Update the score for each tile
+                            Program.score += 20;
+                            this.label1.Text = "Score: " + Program.score;
 
-                            //Randomize color again
+                            //Keep old image color
+                            var oldImageIndex = refillBoard.imageIndex;
 
+                            //Randomize color of tile
                             Random random = new Random();
                             int currentImage = random.Next(0, 4);
                             if (!Program.randomNoDuplicates.Contains(currentImage) && Program.randomNoDuplicates.Count != 4)
@@ -145,22 +147,29 @@ namespace ColorBuster
                                 currentImage = random.Next(0, 4);
                             }
 
-                            tileModel.control.BackgroundImage = Program.images[currentImage];
-
-                            tileModel.imageIndex = currentImage;
-
-                            //Add tile
-                            board.Controls.Add(tileModel.control);
+                            refillBoard.control.BackgroundImage = Program.pop[oldImageIndex];
+                            refillBoard.imageIndex = currentImage;
 
                             //Update list of tiles
                             foreach (var updateTile in Program.tileList)
                             {
-                                if (updateTile.xLocation == tileModel.xLocation && updateTile.yLocation == tileModel.yLocation)
+                                if (updateTile.xLocation == refillBoard.xLocation && updateTile.yLocation == refillBoard.yLocation)
                                 {
-                                    updateTile.imageIndex = tileModel.imageIndex;
+                                    updateTile.imageIndex = refillBoard.imageIndex;
                                 }
                             }
                         }
+                        //Show poped tiles
+                        board.Refresh();
+
+                        //Wait 1 sec after displaying poped tiles to display new ones
+                        System.Threading.Thread.Sleep(1000);
+                        foreach (var getNewTileColor in Program.matchTiles)
+                        {
+                            getNewTileColor.control.BackgroundImage = Program.images[getNewTileColor.imageIndex];
+                        }
+                        board.Refresh();
+                       
                         Program.matchTiles.Clear();
                     }
                     else if (tiles.Count == 0 && Program.matchTiles.Count == 0 && moveAvailable)
