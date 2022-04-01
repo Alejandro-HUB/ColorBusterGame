@@ -30,6 +30,9 @@ namespace ColorBuster
         //Get matched tiles
         public static List<TileModel> matchTiles = new List<TileModel>();
 
+        //Is move available tile list
+        public static List<TileModel> isMoveAvailableTileList = new List<TileModel>();
+
         //Randomize colors even more
         public static List<int> randomNoDuplicates = new List<int>();
 
