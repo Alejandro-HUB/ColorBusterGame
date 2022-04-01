@@ -30,7 +30,7 @@
         {
             this.board = new System.Windows.Forms.Panel();
             this.newGameButton = new System.Windows.Forms.Button();
-            this.label1 = new System.Windows.Forms.Label();
+            this.ScoreLabel = new System.Windows.Forms.Label();
             this.Notification = new System.Windows.Forms.Label();
             this.Cat = new System.Windows.Forms.PictureBox();
             this.settingsButton = new System.Windows.Forms.Button();
@@ -58,15 +58,15 @@
             this.newGameButton.UseVisualStyleBackColor = true;
             this.newGameButton.Click += new System.EventHandler(this.newGameButton_Click);
             // 
-            // label1
+            // ScoreLabel
             // 
-            this.label1.AutoSize = true;
-            this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label1.Location = new System.Drawing.Point(449, 28);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(93, 32);
-            this.label1.TabIndex = 2;
-            this.label1.Text = "Score";
+            this.ScoreLabel.AutoSize = true;
+            this.ScoreLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.ScoreLabel.Location = new System.Drawing.Point(449, 28);
+            this.ScoreLabel.Name = "ScoreLabel";
+            this.ScoreLabel.Size = new System.Drawing.Size(93, 32);
+            this.ScoreLabel.TabIndex = 2;
+            this.ScoreLabel.Text = "Score";
             // 
             // Notification
             // 
@@ -122,7 +122,7 @@
             this.Controls.Add(this.Notification);
             this.Controls.Add(this.Cat);
             this.Controls.Add(this.settingsButton);
-            this.Controls.Add(this.label1);
+            this.Controls.Add(this.ScoreLabel);
             this.Controls.Add(this.newGameButton);
             this.Controls.Add(this.board);
             this.MaximizeBox = false;
@@ -140,7 +140,7 @@
 
         private System.Windows.Forms.Panel board;
         private System.Windows.Forms.Button newGameButton;
-        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Label ScoreLabel;
         private System.Windows.Forms.Button settingsButton;
         private System.Windows.Forms.PictureBox Cat;
         private System.Windows.Forms.Label Notification;

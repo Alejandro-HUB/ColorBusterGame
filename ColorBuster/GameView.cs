@@ -64,7 +64,7 @@ namespace ColorBuster
                     tiles[i].Left = 10;
                     tiles[i].Width = 540 / Program.rows;
                     tiles[i].Height = 540 / Program.rows;
-                    tiles[i].Font = new Font(label1.Font.FontFamily, label1.Font.Size - 2.5f, label1.Font.Style);
+                    tiles[i].Font = new Font(ScoreLabel.Font.FontFamily, ScoreLabel.Font.Size - 2.5f, ScoreLabel.Font.Style);
                     tiles[i].ForeColor = Color.Black;
                     tiles[i].BorderStyle = BorderStyle.Fixed3D;
                     tiles[i].BackgroundImageLayout = ImageLayout.Stretch;
@@ -128,7 +128,7 @@ namespace ColorBuster
                         {
                             //Update the score for each tile
                             Program.score += 20;
-                            this.label1.Text = "Score: " + Program.score;
+                            this.ScoreLabel.Text = "Score: " + Program.score;
 
                             //Keep old image color
                             var oldImageIndex = refillBoard.imageIndex;
@@ -227,7 +227,7 @@ namespace ColorBuster
             }
         }
 
-        public void resetBoard(Image Cat_Status, string label1Text, string NotificationText)
+        public void resetBoard(Image Cat_Status, string ScoreText, string NotificationText)
         {
             //Reset Board
             Program.score = 0;
@@ -237,7 +237,7 @@ namespace ColorBuster
             board.Controls.Clear();
             Program.images.Clear();
             Program.pop.Clear();
-            this.label1.Text = label1Text;
+            this.ScoreLabel.Text = ScoreText;
             this.Notification.Text = NotificationText;
             Cat.BackgroundImage = Cat_Status;
         }
