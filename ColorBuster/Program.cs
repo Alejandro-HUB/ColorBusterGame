@@ -30,6 +30,9 @@ namespace ColorBuster
         //Randomize colors even more
         public static List<int> randomNoDuplicates = new List<int>();
 
+        //List of tiles to check if there is a move avaialable
+        public static List<TileModel> isMoveAvailable = new List<TileModel>();
+
         /// <summary>
         /// The main entry point for the application.
         /// </summary>
