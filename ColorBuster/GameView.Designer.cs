@@ -31,7 +31,10 @@
             this.board = new System.Windows.Forms.Panel();
             this.newGameButton = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
+            this.Notification = new System.Windows.Forms.Label();
+            this.Cat = new System.Windows.Forms.PictureBox();
             this.settingsButton = new System.Windows.Forms.Button();
+            ((System.ComponentModel.ISupportInitialize)(this.Cat)).BeginInit();
             this.SuspendLayout();
             // 
             // board
@@ -63,6 +66,27 @@
             this.label1.TabIndex = 2;
             this.label1.Text = "Score";
             // 
+            // Notification
+            // 
+            this.Notification.AutoSize = true;
+            this.Notification.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.Notification.Location = new System.Drawing.Point(717, 955);
+            this.Notification.Name = "Notification";
+            this.Notification.Size = new System.Drawing.Size(169, 32);
+            this.Notification.TabIndex = 4;
+            this.Notification.Text = "Notification";
+            // 
+            // Cat
+            // 
+            this.Cat.BackColor = System.Drawing.Color.Transparent;
+            this.Cat.BackgroundImage = global::ColorBuster.Properties.Resources.Cat_Idle;
+            this.Cat.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.Cat.Location = new System.Drawing.Point(923, 551);
+            this.Cat.Name = "Cat";
+            this.Cat.Size = new System.Drawing.Size(291, 370);
+            this.Cat.TabIndex = 3;
+            this.Cat.TabStop = false;
+            // 
             // settingsButton
             // 
             this.settingsButton.BackgroundImage = global::ColorBuster.Properties.Resources.img_105979;
@@ -80,7 +104,9 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.White;
-            this.ClientSize = new System.Drawing.Size(1001, 999);
+            this.ClientSize = new System.Drawing.Size(1271, 1043);
+            this.Controls.Add(this.Notification);
+            this.Controls.Add(this.Cat);
             this.Controls.Add(this.settingsButton);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.newGameButton);
@@ -89,6 +115,7 @@
             this.Name = "GameView";
             this.Text = "Color Buster Game";
             this.Load += new System.EventHandler(this.GameView_Load);
+            ((System.ComponentModel.ISupportInitialize)(this.Cat)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -100,6 +127,8 @@
         private System.Windows.Forms.Button newGameButton;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Button settingsButton;
+        private System.Windows.Forms.PictureBox Cat;
+        private System.Windows.Forms.Label Notification;
     }
 }
 

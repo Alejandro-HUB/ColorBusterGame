@@ -118,5 +118,23 @@
   <ItemGroup>
     <None Include="Resources\pop_yellow.png" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Cat_Happy.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Cat_Idle.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Cat_Normal.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Cat_Sad.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Cat_Surprised.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Cat_Mad.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

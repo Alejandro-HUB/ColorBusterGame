@@ -37,6 +37,7 @@ namespace ColorBuster
             Program.tileList.Clear();
             Program.matchTiles.Clear();
             this.label1.Text = "Score: " + Program.score;
+            Cat.BackgroundImage = ColorBuster.Properties.Resources.Cat_Normal;
 
             //Colors
             Program.images.Add(ColorBuster.Properties.Resources.blue);
@@ -159,6 +160,14 @@ namespace ColorBuster
                                 }
                             }
                         }
+                        //Get Current Earned Score
+                        var currentScore = Program.matchTiles.Count * 20;
+                        Notification.Text = "+" + currentScore + " Points";
+                        Notification.Refresh();
+                        Cat.BackgroundImage = ColorBuster.Properties.Resources.Cat_Happy;
+                        Cat.Refresh();
+
+
                         //Show poped tiles
                         board.Refresh();
 
@@ -168,23 +177,38 @@ namespace ColorBuster
                         {
                             getNewTileColor.control.BackgroundImage = Program.images[getNewTileColor.imageIndex];
                         }
+                        Cat.BackgroundImage = ColorBuster.Properties.Resources.Cat_Normal;
                         board.Refresh();
                        
                         Program.matchTiles.Clear();
                     }
                     else if (tiles.Count == 0 && Program.matchTiles.Count == 0 && moveAvailable)
                     {
-                        MessageBox.Show("Clicked a tile with no matching tiles");
+                        Notification.Text = "Clicked a tile with no matching tiles";
+                        Notification.Refresh();
+                        Cat.BackgroundImage = ColorBuster.Properties.Resources.Cat_Surprised;
+                        Cat.Refresh();
+                        System.Threading.Thread.Sleep(1000);
+                        Cat.BackgroundImage = ColorBuster.Properties.Resources.Cat_Normal;
+                        Cat.Refresh();
                         Program.matchTiles.Clear();
                     }
                     else if (Program.matchTiles.Count < Program.matchedTiles && moveAvailable)
                     {
-                        MessageBox.Show("Matched tiles set: " + Program.matchedTiles
-                                       + "\nMatched tiles clicked: " + (Program.matchTiles.Count));
+                        Notification.Text = "Matched tiles set: " + Program.matchedTiles
+                                       + "\nMatched tiles clicked: " + Program.matchTiles.Count;
+                        Notification.Refresh();
+                        Cat.BackgroundImage = ColorBuster.Properties.Resources.Cat_Mad;
+                        Cat.Refresh();
+                        System.Threading.Thread.Sleep(1000);
+                        Cat.BackgroundImage = ColorBuster.Properties.Resources.Cat_Normal;
+                        Cat.Refresh();
                         Program.matchTiles.Clear();
                     }
                     else
                     {
+                        Cat.BackgroundImage = ColorBuster.Properties.Resources.Cat_Sad;
+                        Cat.Refresh();
                         string message = "No more moves available"
                                         + "\nNew game?";
                         string title = "Game over";
