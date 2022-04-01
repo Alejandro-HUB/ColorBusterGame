@@ -30,16 +30,7 @@ namespace ColorBuster
         private void initBoard()
         {
             //Reset Board
-            Program.score = 0;
-            Program.tileList.Clear();
-            Program.matchTiles.Clear();
-            Program.isMoveAvailableTileList.Clear();
-            board.Controls.Clear();
-            Program.images.Clear();
-            Program.pop.Clear();
-            this.label1.Text = "Score: " + Program.score;
-            this.Notification.Text = "Game Started";
-            Cat.BackgroundImage = ColorBuster.Properties.Resources.Cat_Normal;
+            resetBoard(ColorBuster.Properties.Resources.Cat_Normal, ("Score: " + Program.score), "Game Started");
 
             //Colors
             Program.images.Add(ColorBuster.Properties.Resources.blue);
@@ -118,7 +109,6 @@ namespace ColorBuster
 
         public void tile_Click(object sender, EventArgs e)
         {
-
             foreach (var tile in Program.tileList)
             {
                 if (((PictureBox)(sender)).Name == tile.Name)
@@ -229,11 +219,27 @@ namespace ColorBuster
                         }
                         else
                         {
-                            this.Close();
+                            resetBoard(ColorBuster.Properties.Resources.Cat_Idle, "Score", "Notification");
+                            break;
                         }
                     }
                 }
             }
+        }
+
+        public void resetBoard(Image Cat_Status, string label1Text, string NotificationText)
+        {
+            //Reset Board
+            Program.score = 0;
+            Program.tileList.Clear();
+            Program.matchTiles.Clear();
+            Program.isMoveAvailableTileList.Clear();
+            board.Controls.Clear();
+            Program.images.Clear();
+            Program.pop.Clear();
+            this.label1.Text = label1Text;
+            this.Notification.Text = NotificationText;
+            Cat.BackgroundImage = Cat_Status;
         }
 
         public bool IsmoveAvailable()
