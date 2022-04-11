@@ -27,19 +27,19 @@ namespace ColorBuster
         private void initBoard()
         {
             //Reset Board
-            resetBoard(ColorBuster.Properties.Resources.Cat_Normal, ("Score: " + Program.score), "Game Started");
+            resetBoard(ColorBuster.Properties.Resources.Cat_Normal, ("Score: " + BoardModel.score), "Game Started");
 
             //Colors
-            Program.images.Add(ColorBuster.Properties.Resources.blue);
-            Program.images.Add(ColorBuster.Properties.Resources.green);
-            Program.images.Add(ColorBuster.Properties.Resources.red);
-            Program.images.Add(ColorBuster.Properties.Resources.yellow);
+            BoardModel.images.Add(ColorBuster.Properties.Resources.blue);
+            BoardModel.images.Add(ColorBuster.Properties.Resources.green);
+            BoardModel.images.Add(ColorBuster.Properties.Resources.red);
+            BoardModel.images.Add(ColorBuster.Properties.Resources.yellow);
 
             //Pop images
-            Program.pop.Add(ColorBuster.Properties.Resources.pop_blue);
-            Program.pop.Add(ColorBuster.Properties.Resources.pop_green);
-            Program.pop.Add(ColorBuster.Properties.Resources.pop_red);
-            Program.pop.Add(ColorBuster.Properties.Resources.pop_yellow);
+            BoardModel.pop.Add(ColorBuster.Properties.Resources.pop_blue);
+            BoardModel.pop.Add(ColorBuster.Properties.Resources.pop_green);
+            BoardModel.pop.Add(ColorBuster.Properties.Resources.pop_red);
+            BoardModel.pop.Add(ColorBuster.Properties.Resources.pop_yellow);
 
             //Tile info
             int x = 0;
@@ -50,17 +50,17 @@ namespace ColorBuster
             Random random = new Random();
 
             //Make rows and columns
-            for (int j = 0; j < Program.columns; j++)
+            for (int j = 0; j < BoardModel.columns; j++)
             {
-                PictureBox[] tiles = new PictureBox[Program.rows];
-                for (int i = 0; i < Program.rows; i++)
+                PictureBox[] tiles = new PictureBox[BoardModel.rows];
+                for (int i = 0; i < BoardModel.rows; i++)
                 {
                     tiles[i] = new PictureBox();
                     tiles[i].Visible = true;
                     tiles[i].Name = "TileData" + totalTiles.ToString();
                     tiles[i].Left = 10;
-                    tiles[i].Width = 540 / Program.rows;
-                    tiles[i].Height = 540 / Program.rows;
+                    tiles[i].Width = BoardModel.BoardWidth / BoardModel.rows;
+                    tiles[i].Height = BoardModel.BoardHeight / BoardModel.columns;
                     tiles[i].Font = new Font(ScoreLabel.Font.FontFamily, ScoreLabel.Font.Size - 2.5f, ScoreLabel.Font.Style);
                     tiles[i].ForeColor = Color.Black;
                     tiles[i].BorderStyle = BorderStyle.Fixed3D;
@@ -69,7 +69,7 @@ namespace ColorBuster
 
                     //Color
                     currentImage = random.Next(0, 4);
-                    tiles[i].BackgroundImage = Program.images[currentImage];
+                    tiles[i].BackgroundImage = BoardModel.images[currentImage];
 
                     //Location
                     x = ((j - 1) + 1) * tiles[i].Width;
@@ -89,11 +89,11 @@ namespace ColorBuster
                     };
 
                     //Add tile to the tile list
-                    Program.tileList.Add(tile);
+                    BoardModel.tileList.Add(tile);
                     totalTiles++;
                 }
                 //Add tiles to the board
-                for (int k = 0; k < Program.rows; k++)
+                for (int k = 0; k < BoardModel.rows; k++)
                 {
                     board.Controls.Add(tiles[k]);
                 }
@@ -108,7 +108,7 @@ namespace ColorBuster
 
         public void tile_Click(object sender, EventArgs e)
         {
-            foreach (var tile in Program.tileList)
+            foreach (var tile in BoardModel.tileList)
             {
                 if (((PictureBox)(sender)).Name == tile.Name)
                 {
@@ -120,14 +120,14 @@ namespace ColorBuster
                     bool moveAvailable = IsmoveAvailable();
 
                     //If there are more moves available and matched tiles settings are met start poping tiles
-                    if (Program.matchTiles.Count >= Program.matchedTiles && tiles.Count != 0 && moveAvailable)
+                    if (BoardModel.matchTiles.Count >= BoardModel.matchedTiles && tiles.Count != 0 && moveAvailable)
                     {
                         //Add new tiles to board
-                        foreach (var refillBoard in Program.matchTiles)
+                        foreach (var refillBoard in BoardModel.matchTiles)
                         {
                             //Update the score for each tile
-                            Program.score += 20;
-                            this.ScoreLabel.Text = "Score: " + Program.score;
+                            BoardModel.score += 20;
+                            this.ScoreLabel.Text = "Score: " + BoardModel.score;
 
                             //Keep old image color
                             var oldImageIndex = refillBoard.imageIndex;
@@ -135,21 +135,21 @@ namespace ColorBuster
                             //Randomize color of tile
                             Random random = new Random();
                             int currentImage = random.Next(0, 4);
-                            if (!Program.randomNoDuplicates.Contains(currentImage) && Program.randomNoDuplicates.Count != 4)
+                            if (!BoardModel.randomNoDuplicates.Contains(currentImage) && BoardModel.randomNoDuplicates.Count != 4)
                             {
-                                Program.randomNoDuplicates.Add(currentImage);
+                                BoardModel.randomNoDuplicates.Add(currentImage);
                             }
                             else
                             {
-                                Program.randomNoDuplicates.Clear();
+                                BoardModel.randomNoDuplicates.Clear();
                                 currentImage = random.Next(0, 4);
                             }
 
-                            refillBoard.control.BackgroundImage = Program.pop[oldImageIndex];
+                            refillBoard.control.BackgroundImage = BoardModel.pop[oldImageIndex];
                             refillBoard.imageIndex = currentImage;
 
                             //Update list of tiles
-                            foreach (var updateTile in Program.tileList)
+                            foreach (var updateTile in BoardModel.tileList)
                             {
                                 if (updateTile.xLocation == refillBoard.xLocation && updateTile.yLocation == refillBoard.yLocation)
                                 {
@@ -158,7 +158,7 @@ namespace ColorBuster
                             }
                         }
                         //Get Current Earned Score
-                        var currentScore = Program.matchTiles.Count * 20;
+                        var currentScore = BoardModel.matchTiles.Count * 20;
                         Notification.Text = "+" + currentScore + " Points";
                         Notification.Refresh();
                         Cat.BackgroundImage = ColorBuster.Properties.Resources.Cat_Happy;
@@ -170,16 +170,16 @@ namespace ColorBuster
 
                         //Wait 1 sec after displaying poped tiles to display new ones
                         System.Threading.Thread.Sleep(1000);
-                        foreach (var getNewTileColor in Program.matchTiles)
+                        foreach (var getNewTileColor in BoardModel.matchTiles)
                         {
-                            getNewTileColor.control.BackgroundImage = Program.images[getNewTileColor.imageIndex];
+                            getNewTileColor.control.BackgroundImage = BoardModel.images[getNewTileColor.imageIndex];
                         }
                         Cat.BackgroundImage = ColorBuster.Properties.Resources.Cat_Normal;
                         board.Refresh();
-                       
-                        Program.matchTiles.Clear();
+
+                        BoardModel.matchTiles.Clear();
                     }
-                    else if (tiles.Count == 0 && Program.matchTiles.Count == 0 && moveAvailable)
+                    else if (tiles.Count == 0 && BoardModel.matchTiles.Count == 0 && moveAvailable)
                     {
                         Notification.Text = "Clicked a tile with no matching tiles";
                         Notification.Refresh();
@@ -188,19 +188,19 @@ namespace ColorBuster
                         System.Threading.Thread.Sleep(1000);
                         Cat.BackgroundImage = ColorBuster.Properties.Resources.Cat_Normal;
                         Cat.Refresh();
-                        Program.matchTiles.Clear();
+                        BoardModel.matchTiles.Clear();
                     }
-                    else if (Program.matchTiles.Count < Program.matchedTiles && moveAvailable)
+                    else if (BoardModel.matchTiles.Count < BoardModel.matchedTiles && moveAvailable)
                     {
-                        Notification.Text = "Matched tiles set: " + Program.matchedTiles
-                                       + "\nMatched tiles clicked: " + Program.matchTiles.Count;
+                        Notification.Text = "Matched tiles set: " + BoardModel.matchedTiles
+                                       + "\nMatched tiles clicked: " + BoardModel.matchTiles.Count;
                         Notification.Refresh();
                         Cat.BackgroundImage = ColorBuster.Properties.Resources.Cat_Mad;
                         Cat.Refresh();
                         System.Threading.Thread.Sleep(1000);
                         Cat.BackgroundImage = ColorBuster.Properties.Resources.Cat_Normal;
                         Cat.Refresh();
-                        Program.matchTiles.Clear();
+                        BoardModel.matchTiles.Clear();
                     }
                     else
                     {
@@ -229,13 +229,13 @@ namespace ColorBuster
         public void resetBoard(Image Cat_Status, string ScoreText, string NotificationText)
         {
             //Reset Board
-            Program.score = 0;
-            Program.tileList.Clear();
-            Program.matchTiles.Clear();
-            Program.isMoveAvailableTileList.Clear();
+            BoardModel.score = 0;
+            BoardModel.tileList.Clear();
+            BoardModel.matchTiles.Clear();
+            BoardModel.isMoveAvailableTileList.Clear();
             board.Controls.Clear();
-            Program.images.Clear();
-            Program.pop.Clear();
+            BoardModel.images.Clear();
+            BoardModel.pop.Clear();
             this.ScoreLabel.Text = ScoreText;
             this.Notification.Text = NotificationText;
             Cat.BackgroundImage = Cat_Status;
@@ -244,26 +244,26 @@ namespace ColorBuster
         public bool IsmoveAvailable()
         {
             //See if there are moves available for each tile in the board
-            foreach (var tile in Program.tileList)
+            foreach (var tile in BoardModel.tileList)
             {
                 //Check for adjecent tiles for each tile
                 getAdjecentTiles(tile, true);
 
 
                 //If all tiles are checked and moves are possible return true
-                if (Program.isMoveAvailableTileList.Count >= Program.matchedTiles)
+                if (BoardModel.isMoveAvailableTileList.Count >= BoardModel.matchedTiles)
                 {
-                    Program.isMoveAvailableTileList.Clear();
+                    BoardModel.isMoveAvailableTileList.Clear();
                     return true;
                 }
 
                 //If it is the last tile and no moves are avialble then return false
-                else if (tile == Program.tileList.Last() && Program.isMoveAvailableTileList.Count < Program.matchedTiles)
+                else if (tile == BoardModel.tileList.Last() && BoardModel.isMoveAvailableTileList.Count < BoardModel.matchedTiles)
                 {
-                    Program.isMoveAvailableTileList.Clear();
+                    BoardModel.isMoveAvailableTileList.Clear();
                     return false;
                 }
-                Program.isMoveAvailableTileList.Clear();
+                BoardModel.isMoveAvailableTileList.Clear();
             }
 
             return false;
@@ -281,11 +281,11 @@ namespace ColorBuster
             //Change the corresponding list if we are checking for is move available or for poping tiles
             if (isMoveAvailableCheck)
             {
-                tilesToCheck = Program.isMoveAvailableTileList;
+                tilesToCheck = BoardModel.isMoveAvailableTileList;
             }
             else
             {
-                tilesToCheck = Program.matchTiles;
+                tilesToCheck = BoardModel.matchTiles;
             }
 
             //Add current tile to alredy checked list if not already there
@@ -295,10 +295,10 @@ namespace ColorBuster
             }
 
             //Locate the tiles next to the current tile
-            TileModel northTile = Program.tileList.Where(y => y != null && y.yLocation == tileToCheck.yLocation - tileToCheck.height && y.xLocation == tileToCheck.xLocation).FirstOrDefault();
-            TileModel southTile = Program.tileList.Where(y => y != null && y.yLocation == tileToCheck.yLocation + tileToCheck.height && y.xLocation == tileToCheck.xLocation).FirstOrDefault();
-            TileModel westTile = Program.tileList.Where(x => x != null && x.xLocation == tileToCheck.xLocation - tileToCheck.width && x.yLocation == tileToCheck.yLocation).FirstOrDefault();
-            TileModel eastTile = Program.tileList.Where(x => x != null && x.xLocation == tileToCheck.xLocation + tileToCheck.width && x.yLocation == tileToCheck.yLocation).FirstOrDefault();
+            TileModel northTile = BoardModel.tileList.Where(y => y != null && y.yLocation == tileToCheck.yLocation - tileToCheck.height && y.xLocation == tileToCheck.xLocation).FirstOrDefault();
+            TileModel southTile = BoardModel.tileList.Where(y => y != null && y.yLocation == tileToCheck.yLocation + tileToCheck.height && y.xLocation == tileToCheck.xLocation).FirstOrDefault();
+            TileModel westTile = BoardModel.tileList.Where(x => x != null && x.xLocation == tileToCheck.xLocation - tileToCheck.width && x.yLocation == tileToCheck.yLocation).FirstOrDefault();
+            TileModel eastTile = BoardModel.tileList.Where(x => x != null && x.xLocation == tileToCheck.xLocation + tileToCheck.width && x.yLocation == tileToCheck.yLocation).FirstOrDefault();
 
             //Get the tiles that have the same color to the current tile
             tiles.Add(northTile);
@@ -331,11 +331,11 @@ namespace ColorBuster
             //Change the corresponding list if we are checking for is move available or for poping tiles
             if (isMoveAvailableCheck)
             {
-                Program.isMoveAvailableTileList = tilesToCheck;
+                BoardModel.isMoveAvailableTileList = tilesToCheck;
             }
             else
             {
-                Program.matchTiles = tilesToCheck;
+                BoardModel.matchTiles = tilesToCheck;
             }
 
             return returnTiles;
@@ -352,8 +352,8 @@ namespace ColorBuster
         private void GameView_Load(object sender, EventArgs e)
         {
             this.FormClosed += new FormClosedEventHandler(GameView_FormClosed);
-            board.Width = 540;
-            board.Height = 540;
+            board.Width = BoardModel.BoardWidth;
+            board.Height = BoardModel.BoardHeight;
             this.FormBorderStyle = FormBorderStyle.FixedSingle;
         }
     }
