@@ -5,6 +5,8 @@ using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
 
+//Made by Alejandro Lopez
+
 namespace ColorBuster
 {
     public partial class GameView : Form

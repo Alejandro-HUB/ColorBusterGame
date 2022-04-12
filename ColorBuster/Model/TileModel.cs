@@ -1,5 +1,7 @@
 ﻿using System.Windows.Forms;
 
+//Made by Alejandro Lopez
+
 namespace ColorBuster
 {
     public class TileModel

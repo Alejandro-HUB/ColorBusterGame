@@ -4,6 +4,8 @@ using System.Data;
 using System.Linq;
 using System.Windows.Forms;
 
+//Made by Alejandro Lopez
+
 namespace ColorBuster
 {
     public partial class SettingsView : Form

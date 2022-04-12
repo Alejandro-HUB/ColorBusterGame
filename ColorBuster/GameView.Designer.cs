@@ -1,4 +1,6 @@
-﻿namespace ColorBuster
+﻿//Made by Alejandro Lopez
+
+namespace ColorBuster
 {
     partial class GameView
     {

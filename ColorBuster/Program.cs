@@ -1,7 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Drawing;
 using System.Windows.Forms;
+
+//Made by Alejandro Lopez
 
 namespace ColorBuster
 {
